@@ -20,6 +20,8 @@ LINHASUBFLOWNODELABEL=10
 LINHASOAPREQUESTNODE=0
 LINHASOAPREQUESTNODEURL=10
 
+touch /tmp/saida_url_AllSubFlowsNodes.txt
+touch /tmp/saida_sub_AllSubFlowsNodes.txt
 
 less /tmp/saida_AllSubFlows.txt | grep -v "Handler" | egrep '^Library|^Application|+ label=|+ Subflow|+   SubFlowNode|+   ComIbmSOAPRequestNode|+   label=|+     subflowImplFile=|+     webServiceURL=' | while read LINHA
 do
@@ -65,7 +67,6 @@ do
 	fi
 
 	#SoapRequestNode URL
-	touch /tmp/saida_url_AllSubFlowsNodes.txt
 	if [ $(printf "$LINHA" | grep "+     webServiceURL=" | wc -l) -eq 1 ];
 	then
 		LINHASOAPREQUESTNODEURL=$(($CONTA-2))
@@ -74,7 +75,7 @@ do
 			SOAPREQUESTNODEURL=$( printf "$LINHA" | grep "webServiceURL=" | awk -F "webServiceURL=" '{print $2}' )
 			LINHAFINAL=$(printf "$APPTYPE | $APPLABEL | $SUBFLOWLABEL | $SOAPREQUESTNODEURL" | sed "s/'//g")
 			
-			if [ $(less saida_url_AllSubFlowsNodes.txt | grep "$LINHAFINAL" | wc -l) -le 1 ];
+			if [ $(less /tmp/saida_url_AllSubFlowsNodes.txt | grep "$LINHAFINAL" | wc -l) -le 1 ];
 			then
 				printf "$LINHAFINAL\n" | tee -a /tmp/saida_url_AllSubFlowsNodes.txt
 			fi
@@ -96,11 +97,12 @@ do
                 if [ $LINHASUBFLOWNODELABEL -eq $LINHASUBFLOWNODE ];
                 then
                         SUBFLOWNODELABEL=$( printf "$LINHA" | grep "subflowImplFile=" | awk -F "subflowImplFile=" '{print $2}' )
-
-			printf "$APPTYPE | " | sed "s/'//g" | tee -a /tmp/saida_sub_AllSubFlowsNodes.txt
-                        printf "$APPLABEL | " | sed "s/'//g" | tee -a /tmp/saida_sub_AllSubFlowsNodes.txt
-			printf "$SUBFLOWLABEL | " | sed "s/'//g" | tee -a /tmp/saida_sub_AllSubFlowsNodes.txt                        
-                       	printf "$SUBFLOWNODELABEL\n" | sed "s/'//g" | tee -a /tmp/saida_sub_AllSubFlowsNodes.txt
+			LINHAFINAL=$(printf "$APPTYPE | $APPLABEL | $SUBFLOWLABEL | $SUBFLOWNODELABEL" | sed "s/'//g")
+			
+			if [ $(less /tmp/saida_sub_AllSubFlowsNodes.txt | grep "$LINHAFINAL" | wc -l) -le 1 ];
+                        then
+				printf "$LINHAFINAL\n" | tee -a /tmp/saida_sub_AllSubFlowsNodes.txt
+			fi
                 fi
         fi
 
