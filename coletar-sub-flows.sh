@@ -64,29 +64,20 @@ do
 		LINHASOAPREQUESTNODE=$CONTA
 	fi
 
-        #SoapRequest Label
-        if [ $(printf "$LINHA" | grep "+     label=" | wc -l) -eq 1 ];
-        then
-                LINHASOAPREQUESTNODELABEL=$(($CONTA-1))
-                if [ $LINHASOAPREQUESTNODELABEL -eq $LINHASOAPREQUESTNODE ];
-                then
-                        REQUESTNODELABEL=$( printf "$LINHA" | grep "label=" | awk -F "label=" '{print $2}' )
-                fi
-        fi
-
 	#SoapRequestNode URL
+	touch /tmp/saida_url_AllSubFlowsNodes.txt
 	if [ $(printf "$LINHA" | grep "+     webServiceURL=" | wc -l) -eq 1 ];
 	then
 		LINHASOAPREQUESTNODEURL=$(($CONTA-2))
 		if [ $LINHASOAPREQUESTNODEURL -eq $LINHASOAPREQUESTNODE ];
 		then
 			SOAPREQUESTNODEURL=$( printf "$LINHA" | grep "webServiceURL=" | awk -F "webServiceURL=" '{print $2}' )
+			LINHAFINAL=$(printf "$APPTYPE | $APPLABEL | $SUBFLOWLABEL | $SOAPREQUESTNODEURL" | sed "s/'//g")
 			
-			printf "$APPTYPE | " | sed "s/'//g" | tee -a /tmp/saida_url_AllSubFlowsNodes.txt
-			printf "$APPLABEL | " | sed "s/'//g" | tee -a /tmp/saida_url_AllSubFlowsNodes.txt
-              		printf "$SUBFLOWLABEL | " | sed "s/'//g" | tee -a /tmp/saida_url_AllSubFlowsNodes.txt
-			#printf "$REQUESTNODELABEL | " | tee -a /tmp/saida_url_AllSubFlowsNodes.txt
-			printf "$SOAPREQUESTNODEURL\n" | sed "s/'//g" | tee -a /tmp/saida_url_AllSubFlowsNodes.txt
+			if [ $(less saida_url_AllSubFlowsNodes.txt | grep "$LINHAFINAL" | wc -l) -le 1 ];
+			then
+				printf "$LINHAFINAL\n" | tee -a /tmp/saida_url_AllSubFlowsNodes.txt
+			fi
                 fi
         fi
 
