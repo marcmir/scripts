@@ -43,6 +43,12 @@ echo "\n=== criando arquivo final ====="
 
 touch /tmp/saida_fim_AllSubFlowsNodes.txt
 
+less saida_url_AllSubFlowsNodes.txt | while read LINHA
+do
+	 printf "\n$LINHA" | tee -a /tmp/saida_fim_AllSubFlowsNodes.txt	
+done
+
+
 less saida_temp_AllSubFlowsNodes.txt | while read LINHA
 do
 	APPNAME=$(printf "$LINHA" | awk '{print $3}')
