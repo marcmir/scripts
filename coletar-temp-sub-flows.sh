@@ -57,9 +57,8 @@ do
 
 	if [ $(less saida_url_AllSubFlowsNodes.txt | grep "$CHAVESUBFLOW" | wc -l) -eq 1 ];
 	then
-		REQUESTNODEURL=$(less saida_url_AllSubFlowsNodes.txt | grep "$CHAVESUBFLOW" | awk '{url=$7" | "$NF; print url}' )
-		LINHAFINAL=$(printf "$LINHA | $REQUESTNODEURL")	
-		
+		REQUESTNODEURL=$(less saida_url_AllSubFlowsNodes.txt | grep "$CHAVESUBFLOW" | awk '{print $NF}' )
+		LINHAFINAL=$(printf "$LINHA | $REQUESTNODEURL")
 
 		if [ $(less saida_fim_AllSubFlowsNodes.txt | grep "$LINHAFINAL" | wc -l) -le 1 ];
 		then

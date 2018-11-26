@@ -85,7 +85,7 @@ do
 			printf "$APPTYPE | " | sed "s/'//g" | tee -a /tmp/saida_url_AllSubFlowsNodes.txt
 			printf "$APPLABEL | " | sed "s/'//g" | tee -a /tmp/saida_url_AllSubFlowsNodes.txt
               		printf "$SUBFLOWLABEL | " | sed "s/'//g" | tee -a /tmp/saida_url_AllSubFlowsNodes.txt
-			printf "$REQUESTNODELABEL | " | tee -a /tmp/saida_url_AllSubFlowsNodes.txt
+			#printf "$REQUESTNODELABEL | " | tee -a /tmp/saida_url_AllSubFlowsNodes.txt
 			printf "$SOAPREQUESTNODEURL\n" | sed "s/'//g" | tee -a /tmp/saida_url_AllSubFlowsNodes.txt
                 fi
         fi
