@@ -70,12 +70,13 @@ do
 	if [ $(printf "$LINHA" | grep "+     webServiceURL=" | wc -l) -eq 1 ];
 	then
 		LINHASOAPREQUESTNODEURL=$(($CONTA-2))
+
 		if [ $LINHASOAPREQUESTNODEURL -eq $LINHASOAPREQUESTNODE ];
 		then
 			SOAPREQUESTNODEURL=$( printf "$LINHA" | grep "webServiceURL=" | awk -F "webServiceURL=" '{print $2}' )
 			LINHAFINAL=$(printf "$APPTYPE | $APPLABEL | $SUBFLOWLABEL | $SOAPREQUESTNODEURL" | sed "s/'//g")
-			
-			if [ $(less /tmp/saida_url_AllSubFlowsNodes.txt | grep "$LINHAFINAL" | wc -l) -le 1 ];
+			NLINHAS=$(less /tmp/saida_url_AllSubFlowsNodes.txt | grep "$LINHAFINAL" | wc -l)
+			if [ $(less /tmp/saida_url_AllSubFlowsNodes.txt | grep "$LINHAFINAL" | wc -l) -eq 0 ];
 			then
 				printf "$LINHAFINAL\n" | tee -a /tmp/saida_url_AllSubFlowsNodes.txt
 			fi
@@ -94,12 +95,13 @@ do
         if [ $(printf "$LINHA" | grep "+     subflowImplFile=" | wc -l) -eq 1 ];
         then
                 LINHASUBFLOWNODELABEL=$(($CONTA-2))
-                if [ $LINHASUBFLOWNODELABEL -eq $LINHASUBFLOWNODE ];
+
+		if [ $LINHASUBFLOWNODELABEL -eq $LINHASUBFLOWNODE ];
                 then
                         SUBFLOWNODELABEL=$( printf "$LINHA" | grep "subflowImplFile=" | awk -F "subflowImplFile=" '{print $2}' )
 			LINHAFINAL=$(printf "$APPTYPE | $APPLABEL | $SUBFLOWLABEL | $SUBFLOWNODELABEL" | sed "s/'//g")
-			
-			if [ $(less /tmp/saida_sub_AllSubFlowsNodes.txt | grep "$LINHAFINAL" | wc -l) -le 1 ];
+			NLINHAS=$(less /tmp/saida_sub_AllSubFlowsNodes.txt | grep "$LINHAFINAL" | wc -l)	
+			if [ $(less /tmp/saida_sub_AllSubFlowsNodes.txt | grep "$LINHAFINAL" | wc -l) -eq 0 ];
                         then
 				printf "$LINHAFINAL\n" | tee -a /tmp/saida_sub_AllSubFlowsNodes.txt
 			fi
