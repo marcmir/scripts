@@ -1,7 +1,8 @@
 #!/bin/bash
  ############################
  #
- # Purpose: List backends URLs from IIB
+ 
+# Purpose: List backends URLs from IIB
  #  Author: Mauro Junior
  #    Date: 28/May/2018
  #
@@ -47,18 +48,19 @@ LINHALABELAPP=10
 LINHAMSGFLOW=0
 LINHAMSGFLOWLABEL=10
 LINHASUBFLOW=0
-LINHASUBFLOWLABEL=10
+LINHASUBFLOWNAME=10
 LINHASOAPREQUESTNODE=0
 LINHASOAPREQUESTNODELABEL=10
 LINHASOAPREQUESTNODEURL=10
 
-cat /tmp/saida_AllMessageFlows.txt | grep -v "Handler" | egrep '^Application|+ label=|+ MessageFlow|+   label=|+   SubFlowNode|+     label=|ComIbmSOAPRequestNode|+     webServiceURL=' | while read LINHA 
+cat /tmp/saida_AllMessageFlows.txt | grep -v "Handler" | egrep '^Application|+ label=|+ MessageFlow|+   label=|+   SubFlowNode|+     subflowImplFile=|+     label=|ComIbmSOAPRequestNode|+     webServiceURL=' | while read LINHA 
 do
  
 	#Application
 	if [ $(printf "$LINHA" | grep "^Application" | wc -l) -eq 1 ];
 	then
 		LINHAAPP=$CONTA
+		APPTYPE="Application"
 	fi
 	
 	#Application Label
@@ -95,16 +97,18 @@ do
         fi
 
 
-        #Sub Flow Label
+        #Subflow Name
         if [ $(printf "$LINHA" | grep "+     label=" | wc -l) -eq 1 ];
         then
-                LINHASUBFLOWLABEL=$(($CONTA-1))
-                if [ $LINHASUBFLOWLABEL -eq $LINHASUBFLOW ];
+                LINHASUBFLOWNAME=$(($CONTA-1))
+                if [ $LINHASUBFLOWNAME -eq $LINHASUBFLOW ];
                 then
                         SUBFLOWLABEL=$( printf "$LINHA" | grep "label=" | awk -F "label=" '{print $2}' )
-                        printf "$APPLABEL | " | sed "s/'//g" | tee -a /tmp/saida_AllMessageFlowsNodes.txt
-                        printf "$MSGFLOWLABEL | " | sed "s/'//g" | tee -a /tmp/saida_AllMessageFlowsNodes.txt
-			printf "$SUBFLOWLABEL\n" | sed "s/'//g" | tee -a /tmp/saida_AllMessageFlowsNodes.txt
+			LINHAFINAL=$(printf "$APPTYPE | $APPLABEL | $MSGFLOWLABEL | $SUBFLOWNAME" | sed "s/'//g")
+			if [ $(less /tmp/saida_url_AllSubFlowsNodes.txt | grep "$LINHAFINAL" | wc -l) -eq 0 ];
+			then
+				printf "$LINHAFINAL\n" | tee -a /tmp/saida_AllMessageFlowsNodes.txt
+			fi
                 fi
         fi
 
@@ -132,6 +136,7 @@ do
                 if [ $LINHASOAPREQUESTNODELABEL -eq $LINHASOAPREQUESTNODE ];
                 then
                         WEBSERVICEURL=$( printf "$LINHA" | grep "webServiceURL=" | awk -F "webServiceURL=" '{print $2}' )
+			LINHAFINAL=$(printf "$APPTYPE | $APPLABEL | $MSGFLOWLABEL | $REQUESTNODELABEL" | sed "s/'//g")
 			printf "$APPLABEL | " | sed "s/'//g" | tee -a /tmp/saida_AllMessageFlowsEndpoints.txt
                         printf "$MSGFLOWLABEL | " | sed "s/'//g" | tee -a /tmp/saida_AllMessageFlowsEndpoints.txt
                         printf "$REQUESTNODELABEL | " | sed "s/'//g" | tee -a /tmp/saida_AllMessageFlowsEndpoints.txt
