@@ -91,21 +91,20 @@ do
         fi
 
 	#Subflow Node
-        if [ $(printf "$LINHA" | grep "SubFlowNode" | wc -l) -eq 1 ];
+        if [ $(printf "$LINHA" | grep "+   SubFlowNode" | wc -l) -eq 1 ];
         then
                 LINHASUBFLOW=$CONTA
         fi
 
-
         #Subflow Name
-        if [ $(printf "$LINHA" | grep "+     label=" | wc -l) -eq 1 ];
-        then
-                LINHASUBFLOWNAME=$(($CONTA-1))
+        if [ $(printf "$LINHA" | grep "+     subflowImplFile=" | wc -l) -eq 1 ];
+	then	
+                LINHASUBFLOWNAME=$(($CONTA-2))
                 if [ $LINHASUBFLOWNAME -eq $LINHASUBFLOW ];
                 then
-                        SUBFLOWLABEL=$( printf "$LINHA" | grep "label=" | awk -F "label=" '{print $2}' )
+			SUBFLOWNAME=$( printf "$LINHA" | grep "subflowImplFile=" | awk -F "subflowImplFile=" '{print $2}' )
 			LINHAFINAL=$(printf "$APPTYPE | $APPLABEL | $MSGFLOWLABEL | $SUBFLOWNAME" | sed "s/'//g")
-			if [ $(less /tmp/saida_url_AllSubFlowsNodes.txt | grep "$LINHAFINAL" | wc -l) -eq 0 ];
+			if [ $(less /tmp/saida_AllMessageFlowsNodes.txt | grep "$LINHAFINAL" | wc -l) -eq 0 ];
 			then
 				printf "$LINHAFINAL\n" | tee -a /tmp/saida_AllMessageFlowsNodes.txt
 			fi
