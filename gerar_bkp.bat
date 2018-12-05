@@ -1,6 +1,6 @@
-docker commit bus marcmir/ambientebkp:1
+docker commit bus marcmir/ambientebkp:2
 
-docker cp bus:/tmp/coletar-temp-sub-flows.sh "c:\Users\MarceloCorreaMiranda\Box Sync\Scripts"
+docker cp bus:/tmp/coletar-message-flows.sh "C:\Users\MarceloCorreaMiranda\Box Sync\Scripts"
 docker cp bus:/tmp/coletar-sub-flows.sh "c:\Users\MarceloCorreaMiranda\Box Sync\Scripts"
 docker cp bus:/tmp/coletar-temp-sub-flows.sh "c:\Users\MarceloCorreaMiranda\Box Sync\Scripts"
 
