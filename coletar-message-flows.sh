@@ -42,6 +42,12 @@ mqsireportproperties IIBNODE01 -e IIBSERVER01 -o AllSubFlows -r > /tmp/saida_All
 sed -i 's/ /+/' /tmp/saida_AllMessageFlows.txt
 sed -i 's/ /+/' /tmp/saida_AllSubFlows.txt
 
+
+#####################################################################
+echo "\n\n\n\===== Iniciando Tratamento de subflows =====\n\n\n" 
+./coletar-sub-flows.sh
+
+echo "\n\n\n\===== Iniciando Tratamento de Message subflows =====\n\n\n"
 CONTA=0
 LINHAAPP=0
 LINHALABELAPP=10

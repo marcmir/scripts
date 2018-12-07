@@ -105,3 +105,6 @@ do
 	CONTA=$(($CONTA+1))
 
 done
+
+echo "\n\n\n\===== Iniciando Tratamento de subflows final =====\n\n\n"
+./coletar-temp-sub-flows.sh
