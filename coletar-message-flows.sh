@@ -28,12 +28,25 @@ timestamp (){
 }
 
 complementar_subflows (){
- 	CHAVE=$1
-	
-	
+ 	#LINHAFINAL=$(printf "$APPTYPE | $APPLABEL | $MSGFLOWLABEL | $MSGFLOWURLSELECTOR | $SUBFLOWNAME"
+	CHAVE=$1
+	VARAPP=$(akw '{prinf $3}')
+	SUBFLOWNAME=$(akw '{prinf $9}')
 
-	printf "$LINHAFINAL\n" | tee -a /tmp/saida_AllMessageFlowsEndpoints.txt
+	cat /tmp/saida_fim_AllSubFlowsNodes.txt | grep " $VARAPP | $SUBFLOWNAME " | while read REGISTRO
+	do
+		DADOSCHAVE=$( printf "$REGISTRO" | awk '{print $1" | "$3" | "$5}')
+		DADOSSUBFLOW=${REGISTRO:${#DADOSCHAVE}:${#REGISTRO}}
+		LINHAFINALREGISTRO=$( printf "$REGISTRO | $DADOSSUBFLOW" )
+		printf "$LINHAFINALREGISTRO\n" | tee -a /tmp/saida_AllMessageFlowsNodes.txt
+		if [ $(less /tmp/saida_AllMessageFlowsNodes.txt | grep "$LINHAFINALREGISTRO" | wc -l) -eq 0 ];
+		then
+			printf "$LINHAFINALREGISTRO\n" | tee -a /tmp/saida_AllMessageFlowsNodes.tXT
+		fi
+	done
 }
+
+
 ############################
 # Main
 ############################
@@ -100,7 +113,7 @@ do
 		if [ $LINHAMSGFLOWLABEL -eq $LINHAMSGFLOW ];
                 then
 			MSGFLOWLABEL=$( printf "$LINHA" | grep "label=" | awk -F "label=" '{print $2}' )
-			MSGFLOWURLSELECTOR=""
+			MSGFLOWURLSELECTOR="SEM_URL_SELECTOR"
                 fi
         fi
 
@@ -122,12 +135,10 @@ do
                 LINHASUBFLOWNAME=$(($CONTA-2))
                 if [ $LINHASUBFLOWNAME -eq $LINHASUBFLOW ];
                 then
-			SUBFLOWNAME=$( printf "$LINHA" | grep "subflowImplFile=" | awk -F "subflowImplFile=" '{print $2}' )
+			SUBFLOWNAME1=$( printf "$LINHA" | grep "subflowImplFile=" | awk -F "subflowImplFile=" '{print $2}' )
+			SUBFLOWNAME=${SUBFLOWNAME1:0:${#SUBFLOWNAME1}-8}
 			LINHAFINAL=$(printf "$APPTYPE | $APPLABEL | $MSGFLOWLABEL | $MSGFLOWURLSELECTOR | $SUBFLOWNAME" | sed "s/'//g")
-			if [ $(less /tmp/saida_AllMessageFlowsNodes.txt | grep "$LINHAFINAL" | wc -l) -eq 0 ];
-			then
-				printf "$LINHAFINAL\n" | tee -a /tmp/saida_AllMessageFlowsNodes.txt
-			fi
+			complementar_subflows $LINHAFINAL
                 fi
         fi
 
