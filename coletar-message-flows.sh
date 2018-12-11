@@ -24,10 +24,16 @@ export PATH ENVIRONMENT URL_NEXUS DATE_INFO
 # Function
 ############################
 timestamp (){
-     printf "$(date +"%F %T.%N") [PID: $$] -"
+	printf "$(date +"%F %T.%N") [PID: $$] -"
 }
 
+complementar_subflows (){
+ 	CHAVE=$1
+	
+	
 
+	printf "$LINHAFINAL\n" | tee -a /tmp/saida_AllMessageFlowsEndpoints.txt
+}
 ############################
 # Main
 ############################
