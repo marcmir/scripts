@@ -30,19 +30,15 @@ timestamp (){
 complementar_subflows (){
  	#LINHAFINAL=$(printf "$APPTYPE | $APPLABEL | $MSGFLOWLABEL | $MSGFLOWURLSELECTOR | $SUBFLOWNAME"
 	CHAVE=$1
-	VARAPP=$(akw '{prinf $3}')
-	SUBFLOWNAME=$(akw '{prinf $9}')
+	VARAPP=$( printf "$1" | awk '{prinf $3}' )
+	SUBFLOWNAME=$( printf "$1" | awk '{prinf $9}' )
 
 	cat /tmp/saida_fim_AllSubFlowsNodes.txt | grep " $VARAPP | $SUBFLOWNAME " | while read REGISTRO
 	do
 		DADOSCHAVE=$( printf "$REGISTRO" | awk '{print $1" | "$3" | "$5}')
 		DADOSSUBFLOW=${REGISTRO:${#DADOSCHAVE}:${#REGISTRO}}
 		LINHAFINALREGISTRO=$( printf "$REGISTRO | $DADOSSUBFLOW" )
-		printf "$LINHAFINALREGISTRO\n" | tee -a /tmp/saida_AllMessageFlowsNodes.txt
-		if [ $(less /tmp/saida_AllMessageFlowsNodes.txt | grep "$LINHAFINALREGISTRO" | wc -l) -eq 0 ];
-		then
-			printf "$LINHAFINALREGISTRO\n" | tee -a /tmp/saida_AllMessageFlowsNodes.tXT
-		fi
+		printf "$LINHAFINALREGISTRO\n" | tee -a /tmp/saida_AllMessageFlowsNodes.tXT
 	done
 }
 
