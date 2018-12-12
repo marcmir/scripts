@@ -50,17 +50,17 @@ complementar_subflows (){
 
 . /opt/ibm/iib-10.0.0.11/server/bin/mqsiprofile
 
-mqsireportproperties IIBNODE01 -e IIBSERVER01 -o AllMessageFlows -r > /tmp/saida_AllMessageFlows.txt
-mqsireportproperties IIBNODE01 -e IIBSERVER01 -o AllSubFlows -r > /tmp/saida_AllSubFlows.txt
+#mqsireportproperties IIBNODE01 -e IIBSERVER01 -o AllMessageFlows -r > /tmp/saida_AllMessageFlows.txt
+#mqsireportproperties IIBNODE01 -e IIBSERVER01 -o AllSubFlows -r > /tmp/saida_AllSubFlows.txt
 
 
-sed -i 's/ /+/' /tmp/saida_AllMessageFlows.txt
-sed -i 's/ /+/' /tmp/saida_AllSubFlows.txt
+#sed -i 's/ /+/' /tmp/saida_AllMessageFlows.txt
+#sed -i 's/ /+/' /tmp/saida_AllSubFlows.txt
 
 
 #####################################################################
 printf "\n\n\n\===== Iniciando Tratamento de subflows =====\n\n\n" 
-./coletar-sub-flows.sh
+#./coletar-sub-flows.sh
 
 printf "\n\n\n\===== Iniciando Tratamento de Message subflows =====\n\n\n"
 
@@ -175,6 +175,6 @@ done
 cat /tmp/saida_AllMessageFlowsEndpoints.txt >> /tmp/saida_iib_backends_urls.txt
 cat /tmp/saida_AllMessageFlowsNodes.txt >> /tmp/saida_iib_backends_urls.txt
 
-rm -f /tmp/saida_AllMessageFlowsEndpoints.txt
-rm -f /tmp/saida_AllMessageFlowsNodes.txt
+#rm -f /tmp/saida_AllMessageFlowsEndpoints.txt
+#rm -f /tmp/saida_AllMessageFlowsNodes.txt
 
